@@ -1,0 +1,103 @@
+declare module 'bunyan' {
+    declare var TRACE: 10;
+    declare var DEBUG: 20;
+    declare var INFO: 30;
+    declare var WARN: 40;
+    declare var ERROR: 50;
+    declare var FATAL: 60;
+
+    declare type BunyanLogLevels =
+    60 | // fatal
+    50 | // error
+    40 | // warn
+    30 | // info
+    20 | // debug
+    10;  // info
+
+    declare type BunyanRecord = {
+        v: number,
+        level: BunyanLogLevels,
+        name: string,
+        hostname: string,
+        pid: string,
+        time: Date,
+        msg: string,
+        src: string,
+        err?: {
+            message: string,
+            name: string,
+            code: any,
+            signal: any,
+            stack: string,
+        },
+        [key: string]: any
+    };
+    declare type LoggerOptions = {
+        name: string,
+        level?: BunyanLogLevels | string,
+        stream?: any,
+        streams?: Array<any>,
+        serializers?: any,
+        src?: boolean,
+        [field: string]: any
+    };
+    // declare type LogMethod = (...args: Array<void>) => boolean &
+    //     (msgOrError: string | number | Error, ...args: Array<void>) => void &
+    //     (errOrFields: Error | { [key: string]: any, err?: Error }, msg: string, ...args: Array<void>) => void &
+    //     (err: Error, msg: string, more: mixed, ...args: Array<void>) => void;
+    declare class Logger extends events$EventEmitter {
+        constructor(opts: LoggerOptions): void;
+        trace(...args: Array<void>): boolean;
+        trace(msgOrErrorOrFields: string | number | Error | BunyanRecord, ...args: Array<void>): void;
+        trace(msgOrErrorOrFields: string | number | Error | BunyanRecord, msg: string, ...args: Array<void>): void;
+        trace(msgOrErrorOrFields: string | number | Error | BunyanRecord, msg: string, more: mixed, ...args: Array<void>): void;
+        debug(...args: Array<void>): boolean;
+        debug(msgOrErrorOrFields: string | number | Error | BunyanRecord, ...args: Array<void>): void;
+        debug(msgOrErrorOrFields: string | number | Error | BunyanRecord, msg: string, ...args: Array<void>): void;
+        debug(msgOrErrorOrFields: string | number | Error | BunyanRecord, msg: string, more: mixed, ...args: Array<void>): void;
+        info(...args: Array<void>): boolean;
+        info(msgOrErrorOrFields: string | number | Error | BunyanRecord, ...args: Array<void>): void;
+        info(msgOrErrorOrFields: string | number | Error | BunyanRecord, msg: string, ...args: Array<void>): void;
+        info(msgOrErrorOrFields: string | number | Error | BunyanRecord, msg: string, more: mixed, ...args: Array<void>): void;
+        warn(...args: Array<void>): boolean;
+        warn(msgOrErrorOrFields: string | number | Error | BunyanRecord, ...args: Array<void>): void;
+        warn(msgOrErrorOrFields: string | number | Error | BunyanRecord, msg: string, ...args: Array<void>): void;
+        warn(msgOrErrorOrFields: string | number | Error | BunyanRecord, msg: string, more: mixed, ...args: Array<void>): void;
+        error(...args: Array<void>): boolean;
+        error(msgOrErrorOrFields: string | number | Error | BunyanRecord, ...args: Array<void>): void;
+        error(msgOrErrorOrFields: string | number | Error | BunyanRecord, msg: string, ...args: Array<void>): void;
+        error(msgOrErrorOrFields: string | number | Error | BunyanRecord, msg: string, more: mixed, ...args: Array<void>): void;
+        fatal(...args: Array<void>): boolean;
+        fatal(msgOrErrorOrFields: string | number | Error | BunyanRecord, ...args: Array<void>): void;
+        fatal(msgOrErrorOrFields: string | number | Error | BunyanRecord, msg: string, ...args: Array<void>): void;
+        fatal(msgOrErrorOrFields: string | number | Error | BunyanRecord, msg: string, more: mixed, ...args: Array<void>): void;
+        child(opts: LoggerOptions): Logger;
+        static stdSerializers: {
+            req: (req: http$ClientRequest) => {
+                method: string,
+                url: stirng,
+                headers: http$ClientRequest.headers,
+                remoteAddress: http$ClientRequest.connection.remoteAddress,
+                remotePort: http$ClientRequest.connection.remotePort
+            },
+            res: (res: http$IncomingMessage) => {  statusCode: http$IncomingMessage.statusCode, header: http$IncomingMessage._header }
+            err: (err: Error) => {
+                message: string,
+                name: string,
+                stack: string,
+                code: string,
+                signal: string
+            }
+        }
+        level(level: string | number): void;
+        levels(level: string | number, value: string | number): void;
+    }
+    declare function createLogger(opts: LoggerOptions): Logger;
+    declare class ConsoleRawStream {
+        write(rec: BunyanRecord): void;
+    }
+    resolveLevel
+    declare var servializers: {
+        err
+    }
+}
